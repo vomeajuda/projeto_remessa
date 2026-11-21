@@ -1,0 +1,12 @@
+Inicio do erro
+Descricao: Nao foi possivel abrir o arquivo de remessa
+Fim do erro
+
+Inicio do erro
+Descricao: Nao foi possivel abrir o arquivo de remessa
+Fim do erro
+
+Inicio do erro
+Descricao: Nao foi possivel abrir o arquivo de remessa
+Fim do erro
+
