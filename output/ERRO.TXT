@@ -6,3 +6,7 @@ Linha da remessa: 13
 Descricao: Os registros apos o cabecalho devem iniciar com 2 indicando um boleto pago
 Fim do erro
 
+Inicio do erro
+Descricao: Nao foi possivel abrir o arquivo de remessa / Arquivo nao encontrado
+Fim do erro
+
