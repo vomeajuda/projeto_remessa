@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct linha{
       char id[2];
@@ -76,6 +77,25 @@ void gera_arquivo_erro(int linha, char *mensagem){
   fclose(filerro);
 }
 
+void gera_arquivo_retorno(char *data, linha2 l){
+  FILE *fileretorno;
+  char nomearquivo[20];
+
+  strcpy(nomearquivo, data);
+  strcat(nomearquivo, "_");
+  strcat(nomearquivo, l.cliente);
+
+  fileretorno = fopen(nomearquivo, "a");
+
+  if (fileretorno == NULL) {
+    gera_arquivo_erro(0, "Nao foi possivel criar o arquivo de retorno");
+    printf("\nErro");
+    return;
+  }
+
+  fclose(fileretorno);
+}
+
 int main(void){
  
   char str[46], data[9];
@@ -124,12 +144,14 @@ int main(void){
    
   for(i=0; i<p; i++){
     printf("\nID = %s", l[i].id);
-      printf("\nCliente = %s", l[i].cliente);
-      printf("\nConta = %s", l[i].conta);
-      printf("\nNumero do Boleto = %s", l[i].num_boleto);
-      printf("\nData de Vencimento = %s", l[i].data_vencimento);
-      printf("\nData de Pagamento = %s", l[i].data_pagamento);
-      printf("\n%.2f", l[i].valor);
+    printf("\nCliente = %s", l[i].cliente);
+    printf("\nConta = %s", l[i].conta);
+    printf("\nNumero do Boleto = %s", l[i].num_boleto);
+    printf("\nData de Vencimento = %s", l[i].data_vencimento);
+    printf("\nData de Pagamento = %s", l[i].data_pagamento);
+    printf("\n%.2f", l[i].valor);
+
+    gera_arquivo_retorno(data, l[i]);
   }
 
   free(l);
