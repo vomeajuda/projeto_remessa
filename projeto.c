@@ -82,10 +82,10 @@ void gera_arquivo_retorno(char *data, linha2 l){
   FILE *fileretorno;
   char nomearquivo[20];
   char cabecalho[20] = "1";
-  char valor[8];
+  char valor[9];
   int existe = 0;
 
-  snprintf(valor, 8, "%07d", (int)lround(l.valor * 100));
+  snprintf(valor, 9, "%08d", (int)lround(l.valor * 100));
 
   strcpy(nomearquivo, data);
   strcat(nomearquivo, "_");
