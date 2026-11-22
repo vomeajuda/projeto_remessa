@@ -57,10 +57,8 @@ void separadados(char *str, linha2 l[], int p){
   l[p].valor = atof(valor);
 }
 
-void gera_arquivo_erro(int linha, char *mensagem, char *conteudo){
+void gera_arquivo_erro(int linha, char *mensagem){
   FILE *filerro;
-  int i;
-  char texto[100];
 
   filerro = fopen("ERRO.TXT", "a");
 
@@ -74,13 +72,6 @@ void gera_arquivo_erro(int linha, char *mensagem, char *conteudo){
     fprintf(filerro, "Linha da remessa: %d\n", linha);
   }
   fprintf(filerro, "Descricao: %s\n", mensagem);
-  if (conteudo != NULL) {
-    for (i = 0; conteudo[i] != '\0' && conteudo[i] != '\n' && conteudo[i] != '\r' && i < 99; i++){
-      texto[i] = conteudo[i];
-    }
-    texto[i] = '\0';
-    fprintf(filerro, "Conteudo da linha: \"%s\"\n", texto);
-  }
   fprintf(filerro, "Fim do erro\n\n");
   fclose(filerro);
 }
@@ -93,15 +84,16 @@ int main(void){
   FILE *fp;
   fp = fopen("remessa.txt", "r");
   if (fp == NULL) {
-    gera_arquivo_erro(0, "Nao foi possivel abrir o arquivo de remessa", NULL);
+    gera_arquivo_erro(0, "Nao foi possivel abrir o arquivo de remessa / Arquivo nao encontrado");
     printf("\nErro");
     return 1;
   }
 
   fgets(str,sizeof(str), fp);
   if(str[0] != '1'){
-    gera_arquivo_erro(1, "O primeiro registro da remessa deve iniciar com 1", str);
+    gera_arquivo_erro(1, "O primeiro registro da remessa deve iniciar com 1");
     printf("\nErro");
+    return 1;
   }else{
     for(i=1;i<=8;i++){
       data[i-1] = str[i];
@@ -121,6 +113,11 @@ int main(void){
 
   for(p=0; p<contalinhas; p++){
     fgets(str,sizeof(str), fp);
+    if(str[0] != '2'){
+      gera_arquivo_erro(p + 2, "Os registros apos o cabecalho devem iniciar com 2 indicando um boleto pago");
+      printf("\nErro");
+      return 1;
+    }
     separadados(str, l, p);
   }
   fclose(fp);
