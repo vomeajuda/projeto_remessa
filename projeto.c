@@ -117,10 +117,34 @@ void gera_arquivo_retorno(char *data, linha2 l){
   fclose(fileretorno);
 }
 
+void gera_final(char *data, char *cliente, int total_boletos, float valor_total){
+    FILE *f;
+    char nomearquivo[20];
+    char boletos[7], valor[11];
+
+    strcpy(nomearquivo, data);
+    strcat(nomearquivo, "_");
+    strcat(nomearquivo, cliente);
+
+    sprintf(boletos, "%06d", total_boletos);
+    sprintf(valor, "%010d", (int)lround(valor_total * 100));
+
+    f = fopen(nomearquivo, "a");
+
+    if(f == NULL){
+        gera_arquivo_erro(0, "Nao foi possivel adicionar o registro final");
+        printf("\nErro");
+        return;
+    }
+
+    fprintf(f, "\n3%s%s", boletos, valor);
+    fclose(f);
+}
+
 int main(void){
- 
   char str[46], data[9];
-  int i, p=0, contalinhas=0;
+  int i, p=0, contalinhas=0, j, total_boletos;
+  float valor_total;
   linha2 *l = NULL;
   FILE *fp;
   fp = fopen("remessa.txt", "r");
@@ -173,6 +197,31 @@ int main(void){
     printf("\nValor = %.2f", l[i].valor);
 
     gera_arquivo_retorno(data, l[i]);
+  }
+
+  for(i=0; i<p; i++){
+    int foi_contado = 0;
+
+    for(j=0; j<i; j++){
+      if(strcmp(l[i].cliente, l[j].cliente) == 0){
+        foi_contado = 1;
+        break;
+      }
+    }
+
+    if(foi_contado == 0){
+      total_boletos = 0;
+      valor_total = 0;
+
+      for(j=0; j<p; j++){
+        if(strcmp(l[i].cliente, l[j].cliente) == 0){
+          total_boletos++;
+          valor_total += l[j].valor;
+        }
+      }
+
+      gera_final(data, l[i].cliente, total_boletos, valor_total);
+    }
   }
 
   free(l);
